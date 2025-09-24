@@ -41,13 +41,14 @@ wslcd() {
 
 Now:
 ```bash
-wslcd C:\\junk\\somedir\\someotherdir
-# shell will cd to /mnt/c/junk/somedir/someotherdir (best case match)
+source ~/.bashrc
+wslcd C:\\temp\\somedir\\someotherdir
+# shell will cd to /mnt/c/temp/somedir/someotherdir (best case match)
 ```
 
 You can also use:
 ```bash
-cd "$(wslcd C:\\junk\\somedir\\someotherdir)"
+cd "$(wslcd C:\\temp\\somedir\\someotherdir)"
 ```
 
 ## Notes
