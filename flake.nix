@@ -33,6 +33,7 @@
             meta = with pkgs.lib; {
               description = "Resolve Windows paths to /mnt paths for cd-ing in WSL";
               homepage = "https://github.com/michaelkc/wslcd";
+              license = licenses.mit;
               mainProgram = "wslcd";
             };
           };
