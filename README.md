@@ -12,11 +12,76 @@
 
 ## Install
 
+### Debian / Ubuntu (WSL)
+
+Download the `.deb` for your architecture from the
+[latest release](https://github.com/michaelkc/wslcd/releases/latest)
+(`amd64` on typical Intel/AMD machines, `arm64` on ARM), then:
+
+```bash
+sudo dpkg -i wslcd_*_amd64.deb   # or *_arm64.deb
+```
+
+This installs:
+
+- `/usr/bin/wslcd` — the binary
+- `/etc/profile.d/wslcd.sh` — a shell wrapper so `wslcd` changes directory directly
+
+The wrapper is sourced by login shells (WSL starts login shells by default),
+so after installing, open a new terminal or run `source /etc/profile` and:
+
+```bash
+wslcd C:\temp\somedir    # actually cds, no function setup needed
+```
+
+> **Fish users:** `profile.d` doesn't apply. Add to `~/.config/fish/functions/wslcd.fish`:
+> ```fish
+> function wslcd
+>     set -l target (command wslcd $argv); and cd $target
+> end
+> ```
+
+### Nix
+
+Run without installing (any Linux system with flakes enabled):
+
+```bash
+nix run github:michaelkc/wslcd -- C:\temp\somedir
+```
+
+Or add it to your flake-based NixOS/home-manager configuration:
+
+```nix
+# flake.nix inputs
+inputs.wslcd = {
+  url = "github:michaelkc/wslcd";
+  inputs.nixpkgs.follows = "nixpkgs"; # build with YOUR nixpkgs channel
+};
+
+# then, e.g. in configuration.nix
+environment.systemPackages = [ inputs.wslcd.packages.x86_64-linux.default ];
+```
+
+On **NixOS**, the package ships `etc/profile.d/wslcd.sh`, which is sourced by
+login shells automatically — `wslcd` cds out of the box.
+
+On **home-manager standalone** or non-NixOS systems, source it yourself:
+
+```bash
+# bash: ~/.bashrc   zsh: ~/.zshrc
+source "$(dirname $(readlink -f $(command -v wslcd)))/../etc/profile.d/wslcd.sh"
+```
+
+### From source
+
 ```bash
 make install
 # or:
 make build && sudo install -m 0755 wslcd /usr/local/bin/wslcd
 ```
+
+If you install from source, copy `packaging/wslcd.sh` into `/etc/profile.d/`
+(or paste the shell function below into your rc file) so `wslcd` can cd.
 
 ## Usage
 
