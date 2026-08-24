@@ -44,7 +44,7 @@ jobs:
           name: wslcd-${{ matrix.goarch }}
           path: |
             dist/wslcd-linux-${{ matrix.goarch }}
-            dist/wslcd_${{ matrix.debarch }}.deb
+            dist/wslcd_*_${{ matrix.debarch }}.deb
 
   release:
     name: Publish release
